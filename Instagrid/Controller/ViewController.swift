@@ -149,6 +149,7 @@ class ViewController: UIViewController , UIImagePickerControllerDelegate, UINavi
                             self.present(self.imagePicker, animated: true, completion: nil)
                         } else {
                             let alertController = UIAlertController(title: "Caution !", message: "Your photo Access is not valid please change the settings", preferredStyle: .alert)
+                            alertController.addAction(UIAlertAction(title: "Ok", style: .default))
                             self.present(alertController, animated: true, completion: nil)
                         }
                     }
