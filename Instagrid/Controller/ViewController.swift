@@ -139,10 +139,7 @@ class ViewController: UIViewController , UIImagePickerControllerDelegate, UINavi
 // MARK: - GridViewDelegate Method
     func viewWasSelected(_ viewSelector: ViewSelector) {
         let photos = PHPhotoLibrary.authorizationStatus()
-        
-            
-            
-            if photos == .notDetermined {
+            if photos != .authorized {
                 PHPhotoLibrary.requestAuthorization({status in
                     DispatchQueue.main.async {
                         if status == .authorized{
@@ -150,9 +147,17 @@ class ViewController: UIViewController , UIImagePickerControllerDelegate, UINavi
                             self.imagePicker.sourceType = .photoLibrary
                             self.viewSelector = viewSelector
                             self.present(self.imagePicker, animated: true, completion: nil)
-                        } else { print("erreur") }
+                        } else {
+                            let alertController = UIAlertController(title: "Caution !", message: "Your photo Access is not valid please change the settings", preferredStyle: .alert)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 })
+            } else {
+                self.imagePicker.allowsEditing = false
+                self.imagePicker.sourceType = .photoLibrary
+                self.viewSelector = viewSelector
+                self.present(self.imagePicker, animated: true, completion: nil)
             }
         
     }
