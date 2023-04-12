@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PhotosUI
 
 class ViewController: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate, PickerGridDelegate, GridViewDelegate {
     
@@ -137,10 +138,23 @@ class ViewController: UIViewController , UIImagePickerControllerDelegate, UINavi
     
 // MARK: - GridViewDelegate Method
     func viewWasSelected(_ viewSelector: ViewSelector) {
-        imagePicker.allowsEditing = false
-        imagePicker.sourceType = .photoLibrary
-        self.viewSelector = viewSelector
-        present(imagePicker, animated: true, completion: nil)
+        let photos = PHPhotoLibrary.authorizationStatus()
+        
+            
+            
+            if photos == .notDetermined {
+                PHPhotoLibrary.requestAuthorization({status in
+                    DispatchQueue.main.async {
+                        if status == .authorized{
+                            self.imagePicker.allowsEditing = false
+                            self.imagePicker.sourceType = .photoLibrary
+                            self.viewSelector = viewSelector
+                            self.present(self.imagePicker, animated: true, completion: nil)
+                        } else { print("erreur") }
+                    }
+                })
+            }
+        
     }
     
     
